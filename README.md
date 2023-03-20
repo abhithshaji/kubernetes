@@ -1,2 +1,2 @@
-# docker-and-kubernetes
-Detailed documentation and sample codes to learn docker and kubernetes.
+# Kubernetes
+Detailed documentation and sample codes to learn about kubernetes, cloud, hyperledger fabric using kubernetes, HLF Operator etc.
