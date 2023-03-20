@@ -1,2 +1,2 @@
 # docker-and-kubernetes
-sample codes to create kubernetes objects
+Detailed documentation and sample codes to learn docker and kubernetes.
