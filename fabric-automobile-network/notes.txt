@@ -1,0 +1,38 @@
+peer0-manufacturer
+basic:798e433c6b461c2dfdb6074cdaa8875a678fa9db0279864d37d4c95c78000c69
+
+peer0-dealer
+basic:c0a455822af0328aed6d7beffd4af07cb36efe3950dca2461e36755883c6376d
+
+peer0-mvd
+basic:6450d891a34fab7071265cfda5ed118bcaf50538f56da646e172da0c2fa9971c
+
+
+approve chaincode peer0-manufacturer
+peer lifecycle chaincode approveformyorg --channelID autochannel --name basic --version 1.0 --package-id basic:798e433c6b461c2dfdb6074cdaa8875a678fa9db0279864d37d4c95c78000c69 --sequence 1 -o orderer:7050 --tls --cafile $ORDERER_CA 
+
+
+approve chaincode peer0-dealer
+peer lifecycle chaincode approveformyorg --channelID autochannel --name basic --version 1.0 --package-id basic:c0a455822af0328aed6d7beffd4af07cb36efe3950dca2461e36755883c6376d --sequence 1 -o orderer:7050 --tls --cafile $ORDERER_CA 
+
+
+approve chaincode peer0-mvd
+peer lifecycle chaincode approveformyorg --channelID autochannel --name basic --version 1.0 --package-id basic:6450d891a34fab7071265cfda5ed118bcaf50538f56da646e172da0c2fa9971c --sequence 1 -o orderer:7050 --tls --cafile $ORDERER_CA 
+
+
+
+checkcommitreadiness
+peer lifecycle chaincode checkcommitreadiness --channelID autochannel --name basic --version 1.0 --sequence 1 -o -orderer:7050 --tls --cafile $ORDERER_CA
+
+
+commit chaincode
+peer lifecycle chaincode commit -o orderer:7050 --channelID autochannel --name basic --version 1.0 --sequence 1 --tls true --cafile $ORDERER_CA --peerAddresses peer0-manufacturer:7051 --tlsRootCertFiles /organizations/peerOrganizations/manufacturer.auto.com/peers/peer0.manufacturer.auto.com/tls/ca.crt --peerAddresses peer0-dealer:7051 --tlsRootCertFiles /organizations/peerOrganizations/dealer.auto.com/peers/peer0.dealer.auto.com/tls/ca.crt --peerAddresses peer0-mvd:7051 --tlsRootCertFiles /organizations/peerOrganizations/mvd.auto.com/peers/peer0.mvd.auto.com/tls/ca.crt
+
+See committed chaincode
+peer lifecycle chaincode querycommitted --channelID autochannel
+
+
+invoke command
+peer chaincode invoke -o orderer:7050 --tls true --cafile $ORDERER_CA -C autochannel -n basic --peerAddresses peer0-manufacturer:7051 --tlsRootCertFiles /organizations/peerOrganizations/manufacturer.auto.com/peers/peer0.manufacturer.auto.com/tls/ca.crt --peerAddresses peer0-dealer:7051 --tlsRootCertFiles /organizations/peerOrganizations/dealer.auto.com/peers/peer0.dealer.auto.com/tls/ca.crt --peerAddresses peer0-mvd:7051 --tlsRootCertFiles /organizations/peerOrganizations/mvd.auto.com/peers/peer0.mvd.auto.com/tls/ca.crt -c '{"Args":["CreateCar","car01","Ford","Mustang","black","ford","june 2000"]}' --waitForEvent
+
+

@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ca-dealer
+spec:
+  selector:
+    matchLabels:
+      app: ca-dealer
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ca-dealer
+    spec:
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: mypvc
+      containers:
+
+        - name: ca-dealer
+          image: hyperledger/fabric-ca:1.4.9
+          imagePullPolicy: "Always"
+          command:
+            [
+              "fabric-ca-server" ,
+              "start", "-b" ,"admin:adminpw","--port","8054", "-d"
+            ]
+          resources:
+            requests:
+              memory: "300Mi"
+              cpu: "300m"
+            limits:
+              memory: "500Mi"
+              cpu: "350m"
+          env:
+           - name: FABRIC_CA_SERVER_CA_NAME
+             value: ca-dealer
+           - name: FABRIC_CA_SERVER_TLS_ENABLED
+             value: "true"
+           - name: FABRIC_CA_SERVER_CSR_CN
+             value: "ca-dealer"
+           - name: FABRIC_CA_SERVER_CSR_HOSTS
+             value: "ca-dealer"
+          volumeMounts:
+            - name: data
+              mountPath: /etc/hyperledger/fabric-ca-server
+              subPath: organizations/fabric-ca/dealer
