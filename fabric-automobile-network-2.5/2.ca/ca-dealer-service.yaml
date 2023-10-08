@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ca-dealer
+  labels:
+    app: ca-dealer
+spec:
+  type: ClusterIP
+  selector:
+    app: ca-dealer
+  ports:
+    - protocol: TCP
+      targetPort: 8054
+      port: 8054

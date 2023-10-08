@@ -1,0 +1,1 @@
+peer channel create -o orderer:7050 -c autochannel -f ./channel-artifacts/autochannel.tx --outputBlock ./channel-artifacts/autochannel.block --tls --cafile /organizations/ordererOrganizations/auto.com/orderers/orderer.auto.com/msp/tlscacerts/tlsca.auto.com-cert.pem

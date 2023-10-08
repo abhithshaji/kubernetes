@@ -1,0 +1,76 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: explorer-config
+data:
+  network.json: |-
+      {
+      "name": "first-network",
+      "version": "1.0.0",
+      "client": {
+        "tlsEnable": true,
+        "adminCredential": {
+          "id": "exploreradmin",
+          "password": "exploreradminpw"
+        },
+        "enableAuthentication": false,
+        "organization": "SroMSP",
+        "connection": {
+          "timeout": {
+            "peer": {
+              "endorser": "300"
+            },
+            "orderer": "300"
+          }
+        }
+      },
+      "channels": {
+        "landchannel": {
+          "peers": {
+            "peer0-sro": {}
+          },
+          "connection": {
+            "timeout": {
+              "peer": {
+                "endorser": "6000",
+                "eventHub": "6000",
+                "eventReg": "6000"
+              }
+            }
+          }
+        }
+      },
+      "organizations": {
+        "SroMSP": {
+          "mspid": "SroMSP",
+          "adminPrivateKey": {
+            "path": "/organizations/peerOrganizations/sro.land.com/users/Admin@sro.land.com/msp/keystore/priv_sk"
+          },
+          "peers": [
+            "peer0-sro"
+          ],
+          "signedCert": {
+            "path": "/organizations/peerOrganizations/sro.land.com/users/Admin@sro.land.com/msp/signcerts/cert.pem"
+          }
+        }
+      },
+      "peers": {
+        "peer0-sro": {
+          "tlsCACerts": {
+            "path": "/organizations/peerOrganizations/sro.land.com/peers/peer0.sro.land.com/tls/ca.crt"
+          },
+          "url": "grpcs://peer0-sro:7051"
+        }
+      }
+      }
+
+  config.json: |- 
+      {
+      "network-configs": {
+        "first-network": {
+          "name": "first-network",
+          "profile": "./first-network.json"
+        }
+      },
+      "license": "Apache-2.0"
+      }
