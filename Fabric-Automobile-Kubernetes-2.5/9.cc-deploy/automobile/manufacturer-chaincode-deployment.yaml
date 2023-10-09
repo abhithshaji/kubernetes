@@ -1,0 +1,30 @@
+---
+#---------------- Chaincode Deployment ---------------------
+apiVersion: apps/v1 # for versions before 1.8.0 use apps/v1beta1
+kind: Deployment
+metadata:
+  name: chaincode-automobile-manufacturer
+  labels:
+    app: chaincode-automobile-manufacturer
+spec:
+  selector:
+    matchLabels:
+      app: chaincode-automobile-manufacturer
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: chaincode-automobile-manufacturer
+    spec:
+      containers:
+        - image: abhithshaji/automobile:3.3
+          imagePullPolicy: Always
+          name: chaincode-automobile-manufacturer
+          env:
+            - name: CHAINCODE_ID
+              value: "automobile:9e81979c0074e9c20ff1c6bcf11cbc265702d8ed09695b95f594a451be635a10"
+            - name: CHAINCODE_SERVER_ADDRESS
+              value: "0.0.0.0:7052"
+          ports:
+            - containerPort: 7052

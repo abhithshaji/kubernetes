@@ -1,0 +1,10 @@
+[
+    {
+        "name": "CollectionOrder",
+        "policy": "OR('ManufacturerMSP.member', 'DealerMSP.member')",
+        "requiredPeerCount": 1,
+        "maxPeerCount": 1,
+        "blockToLive": 10000,
+        "memberOnlyRead": true
+    }
+]

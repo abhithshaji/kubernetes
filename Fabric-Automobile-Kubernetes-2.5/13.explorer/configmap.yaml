@@ -1,0 +1,76 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: explorer-config
+data:
+  network.json: |-
+      {
+      "name": "first-network",
+      "version": "1.0.0",
+      "client": {
+        "tlsEnable": true,
+        "adminCredential": {
+          "id": "exploreradmin",
+          "password": "exploreradminpw"
+        },
+        "enableAuthentication": false,
+        "organization": "ManufacturerMSP",
+        "connection": {
+          "timeout": {
+            "peer": {
+              "endorser": "300"
+            },
+            "orderer": "300"
+          }
+        }
+      },
+      "channels": {
+        "autochannel": {
+          "peers": {
+            "peer0-manufacturer": {}
+          },
+          "connection": {
+            "timeout": {
+              "peer": {
+                "endorser": "6000",
+                "eventHub": "6000",
+                "eventReg": "6000"
+              }
+            }
+          }
+        }
+      },
+      "organizations": {
+        "ManufacturerMSP": {
+          "mspid": "ManufacturerMSP",
+          "adminPrivateKey": {
+            "path": "/organizations/peerOrganizations/manufacturer.auto.com/users/Admin@manufacturer.auto.com/msp/keystore/priv_sk"
+          },
+          "peers": [
+            "peer0-manufacturer"
+          ],
+          "signedCert": {
+            "path": "/organizations/peerOrganizations/manufacturer.auto.com/users/Admin@manufacturer.auto.com/msp/signcerts/cert.pem"
+          }
+        }
+      },
+      "peers": {
+        "peer0-manufacturer": {
+          "tlsCACerts": {
+            "path": "/organizations/peerOrganizations/manufacturer.auto.com/peers/peer0.manufacturer.auto.com/tls/ca.crt"
+          },
+          "url": "grpcs://peer0-manufacturer:7051"
+        }
+      }
+      }
+
+  config.json: |- 
+      {
+      "network-configs": {
+        "first-network": {
+          "name": "first-network",
+          "profile": "./first-network.json"
+        }
+      },
+      "license": "Apache-2.0"
+      }

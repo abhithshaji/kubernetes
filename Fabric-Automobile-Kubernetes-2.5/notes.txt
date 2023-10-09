@@ -1,0 +1,113 @@
+**create channel**
+in any peer-cli pod terminal
+
+./scripts/createAppChannel.sh
+
+
+**join channel**
+in all peer-cli pod terminal
+
+peer channel join -b ./channel-artifacts/autochannel.block
+
+peer channel list
+
+
+
+**Anchor update**
+in their respective peer-cli pod terminal
+
+./scripts/updateAnchorPeer.sh ManufacturerMSP
+./scripts/updateAnchorPeer.sh DealerMSP
+./scripts/updateAnchorPeer.sh MvdMSP
+
+
+
+**package chaincode**
+
+cd nfs_clientshare/chaincode/automobile/packaging
+
+sudo tar cfz code.tar.gz connection.json
+
+sudo tar cfz automobile-manufacturer.tgz code.tar.gz metadata.json
+
+sudo rm code.tar.gz
+
+**edit file and do for all peers
+
+sudo vim connection.json
+
+
+
+**Install chaincode**
+in their respective peer-cli pod terminal
+
+cd /opt/gopath/src/github.com/chaincode/automobile/packaging
+
+peer lifecycle chaincode install automobile-manufacturer.tgz
+
+peer lifecycle chaincode install automobile-dealer.tgz
+
+peer lifecycle chaincode install automobile-mvd.tgz
+
+
+**chaincode ID**
+
+peer0-manufacturer
+automobile:9e81979c0074e9c20ff1c6bcf11cbc265702d8ed09695b95f594a451be635a10
+
+peer0-dealer
+automobile:13aff83f58ac33fdc61ee4ba6353f58292b5aa5985aebfbad4db350bf6b5225e
+
+peer0-mvd
+automobile:fe5644ec3a6aea74a1e56eb19f5a860be935b5aec93fb67872c9f38bf8348b4f
+
+
+
+**approve chaincode peer0-manufacturer**
+
+peer lifecycle chaincode approveformyorg --channelID autochannel --name automobile --version 1.0 --package-id automobile:9e81979c0074e9c20ff1c6bcf11cbc265702d8ed09695b95f594a451be635a10 --sequence 1 -o orderer:7050 --tls --cafile $ORDERER_CA --collections-config /opt/gopath/src/github.com/chaincode/automobile/collections.json
+
+
+**approve chaincode peer0-dealer**
+
+peer lifecycle chaincode approveformyorg --channelID autochannel --name automobile --version 1.0 --package-id automobile:13aff83f58ac33fdc61ee4ba6353f58292b5aa5985aebfbad4db350bf6b5225e --sequence 1 -o orderer:7050 --tls --cafile $ORDERER_CA --collections-config /opt/gopath/src/github.com/chaincode/automobile/collections.json
+
+
+**approve chaincode peer0-mvd**
+
+peer lifecycle chaincode approveformyorg --channelID autochannel --name automobile --version 1.0 --package-id automobile:fe5644ec3a6aea74a1e56eb19f5a860be935b5aec93fb67872c9f38bf8348b4f --sequence 1 -o orderer:7050 --tls --cafile $ORDERER_CA --collections-config /opt/gopath/src/github.com/chaincode/automobile/collections.json
+
+
+
+**checkcommitreadiness**
+in any peer-cli pod terminal
+
+peer lifecycle chaincode checkcommitreadiness --channelID autochannel --name automobile --version 1.0 --sequence 1 -o -orderer:7050 --tls --cafile $ORDERER_CA --collections-config /opt/gopath/src/github.com/chaincode/automobile/collections.json
+
+
+
+**commit chaincode**
+in any peer-cli pod terminal
+
+peer lifecycle chaincode commit -o orderer:7050 --channelID autochannel --name automobile --version 1.0 --sequence 1 --tls true --cafile $ORDERER_CA --peerAddresses peer0-manufacturer:7051 --tlsRootCertFiles /organizations/peerOrganizations/manufacturer.auto.com/peers/peer0.manufacturer.auto.com/tls/ca.crt --peerAddresses peer0-dealer:7051 --tlsRootCertFiles /organizations/peerOrganizations/dealer.auto.com/peers/peer0.dealer.auto.com/tls/ca.crt --peerAddresses peer0-mvd:7051 --tlsRootCertFiles /organizations/peerOrganizations/mvd.auto.com/peers/peer0.mvd.auto.com/tls/ca.crt --collections-config /opt/gopath/src/github.com/chaincode/automobile/collections.json
+
+
+
+**See committed chaincode**
+in all peer-cli pod terminal
+
+peer lifecycle chaincode querycommitted --channelID autochannel
+
+
+
+**query command**
+
+peer chaincode query -C autochannel -n automobile -c '{"Args":["readCar","land1"]}'
+
+
+
+**invoke command**
+
+peer chaincode invoke -o orderer:7050 --tls true --cafile $ORDERER_CA -C autochannel -n automobile --peerAddresses peer0-manufacturer:7051 --tlsRootCertFiles /organizations/peerOrganizations/manufacturer.auto.com/peers/peer0.manufacturer.auto.com/tls/ca.crt --peerAddresses peer0-dealer:7051 --tlsRootCertFiles /organizations/peerOrganizations/dealer.auto.com/peers/peer0.dealer.auto.com/tls/ca.crt --peerAddresses peer0-mvd:7051 --tlsRootCertFiles /organizations/peerOrganizations/mvd.auto.com/peers/peer0.mvd.auto.com/tls/ca.crt -c '{"Args":["createCar","car1","Ford","Mustang","Black","12/12/2020","Ford"]}' --waitForEvent
+
+
