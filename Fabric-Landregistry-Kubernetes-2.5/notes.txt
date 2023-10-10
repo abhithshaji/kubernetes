@@ -1,0 +1,111 @@
+**create channel**
+in any peer-cli pod terminal
+
+./scripts/createAppChannel.sh
+
+
+**join channel**
+in all peer-cli pod terminal
+
+peer channel join -b ./channel-artifacts/landchannel.block
+
+peer channel list
+
+
+
+**Anchor update**
+in their respective peer-cli pod terminal
+
+./scripts/updateAnchorPeer.sh SroMSP
+./scripts/updateAnchorPeer.sh BankMSP
+./scripts/updateAnchorPeer.sh RevenueMSP
+
+
+
+**package chaincode**
+
+cd nfs_clientshare/chaincode/fabland/packaging
+
+sudo tar cfz code.tar.gz connection.json
+
+sudo tar cfz fabland-sro.tgz code.tar.gz metadata.json
+
+sudo rm code.tar.gz
+
+**edit file and do for all peers
+
+sudo vim connection.json
+
+
+
+**Install chaincode**
+in their respective peer-cli pod terminal
+
+cd /opt/gopath/src/github.com/chaincode/fabland/packaging
+
+peer lifecycle chaincode install fabland-sro.tgz
+
+peer lifecycle chaincode install fabland-bank.tgz
+
+peer lifecycle chaincode install fabland-revenue.tgz
+
+
+**chaincode ID**
+
+peer0-sro
+fabland:2cc3affe748a554ed496414d600e74f96fb1d00f25df7378b935e8c83ef48a36
+
+peer0-bank
+fabland:5135c39e5ccea99d71d968c7870adf1e700e36e88360f6e3f3bf2a77d053c969
+
+peer0-revenue
+fabland:7d4c77810d67e7fae3241d9af189a10e13fb25294953c32de206e4e918fa2f9e
+
+
+
+**approve chaincode peer0-sro**
+
+peer lifecycle chaincode approveformyorg --channelID landchannel --name fabland --version 1.0 --package-id fabland:2cc3affe748a554ed496414d600e74f96fb1d00f25df7378b935e8c83ef48a36 --sequence 1 -o orderer:7050 --tls --cafile $ORDERER_CA 
+
+
+**approve chaincode peer0-bank**
+
+peer lifecycle chaincode approveformyorg --channelID landchannel --name fabland --version 1.0 --package-id fabland:5135c39e5ccea99d71d968c7870adf1e700e36e88360f6e3f3bf2a77d053c969 --sequence 1 -o orderer:7050 --tls --cafile $ORDERER_CA 
+
+
+**approve chaincode peer0-revenue**
+
+peer lifecycle chaincode approveformyorg --channelID landchannel --name fabland --version 1.0 --package-id fabland:7d4c77810d67e7fae3241d9af189a10e13fb25294953c32de206e4e918fa2f9e --sequence 1 -o orderer:7050 --tls --cafile $ORDERER_CA 
+
+
+
+**checkcommitreadiness**
+in any peer-cli pod terminal
+
+peer lifecycle chaincode checkcommitreadiness --channelID landchannel --name fabland --version 1.0 --sequence 1 -o -orderer:7050 --tls --cafile $ORDERER_CA
+
+
+
+**commit chaincode**
+in any peer-cli pod terminal
+
+peer lifecycle chaincode commit -o orderer:7050 --channelID landchannel --name fabland --version 1.0 --sequence 1 --tls true --cafile $ORDERER_CA --peerAddresses peer0-sro:7051 --tlsRootCertFiles /organizations/peerOrganizations/sro.land.com/peers/peer0.sro.land.com/tls/ca.crt --peerAddresses peer0-bank:7051 --tlsRootCertFiles /organizations/peerOrganizations/bank.land.com/peers/peer0.bank.land.com/tls/ca.crt --peerAddresses peer0-revenue:7051 --tlsRootCertFiles /organizations/peerOrganizations/revenue.land.com/peers/peer0.revenue.land.com/tls/ca.crt
+
+
+
+**See committed chaincode**
+in all peer-cli pod terminal
+
+peer lifecycle chaincode querycommitted --channelID landchannel
+
+
+
+**query command**
+
+peer chaincode query -C landchannel -n fabland -c '{"Args":["readLand","land1"]}'
+
+
+
+**invoke command**
+
+peer chaincode invoke -o orderer:7050 --tls true --cafile $ORDERER_CA -C landchannel -n fabland --peerAddresses peer0-sro:7051 --tlsRootCertFiles /organizations/peerOrganizations/sro.land.com/peers/peer0.sro.land.com/tls/ca.crt --peerAddresses peer0-bank:7051 --tlsRootCertFiles /organizations/peerOrganizations/bank.land.com/peers/peer0.bank.land.com/tls/ca.crt --peerAddresses peer0-revenue:7051 --tlsRootCertFiles /organizations/peerOrganizations/revenue.land.com/peers/peer0.revenue.land.com/tls/ca.crt -c '{"Args":["createLand","land1","Kozhikode","Koduvalli","Koduvalli","Koodaranhi","1","1","2","10","John","sea","jack","wall","no remarks","Abhith","2","1"]}' --waitForEvent

@@ -1,0 +1,19 @@
+.errorMessage {
+    color: #F55050;
+    font-weight: bold;
+    margin: 0 !important;
+    padding: 0 !important;
+    gap: 0 !important;
+}
+
+.stack-box {
+    border: 2px solid navy;
+    margin-top: 30vh;
+    margin-left: 100em;
+    padding: 3em;
+    background-color: azure;
+}
+
+.God {
+    visibility: hidden;
+}

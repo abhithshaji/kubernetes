@@ -1,0 +1,62 @@
+body {
+  background-color: #3e54ac;
+}
+
+.sro-searchbox {
+  padding-top: 1.5em;
+  color: white;
+}
+
+.parameter {
+  color: #c0eef2;
+}
+
+.fetched-land-div {
+  padding: 0;
+  margin-top: 1em;
+}
+
+.fetched-land-table {
+  background-color: #00337c;
+  color: white;
+  padding: 0;
+  font-size: 13px;
+}
+
+.buttons-stack {
+  margin-bottom: 4em;
+}
+
+.sro-page-name {
+  color: navy;
+  font-weight: 700;
+}
+
+.sro-navbar-text {
+  color: #e1eedd !important;
+}
+
+.sro-navbar-text:hover {
+  color: #ecf2ff !important;
+}
+
+.sro-navbar-text2 {
+  color: #8d7b68;
+  font-weight: 100;
+  font-style: italic;
+  margin-right: 7px;
+}
+
+.sro-navbar-bottom {
+  height: 35px !important;
+  background-color: #301e67 !important;
+  color: #e1eedd;
+}
+
+.sro-navbar-bottom-container {
+  text-align: center;
+}
+
+.logo-box {
+  border: 2px solid white;
+}

@@ -1,0 +1,1 @@
+peer channel create -o orderer:7050 -c landchannel -f ./channel-artifacts/landchannel.tx --outputBlock ./channel-artifacts/landchannel.block --tls --cafile /organizations/ordererOrganizations/land.com/orderers/orderer.land.com/msp/tlscacerts/tlsca.land.com-cert.pem

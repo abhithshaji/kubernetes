@@ -1,0 +1,30 @@
+---
+#---------------- Chaincode Deployment ---------------------
+apiVersion: apps/v1 # for versions before 1.8.0 use apps/v1beta1
+kind: Deployment
+metadata:
+  name: chaincode-fabland-bank
+  labels:
+    app: chaincode-fabland-bank
+spec:
+  selector:
+    matchLabels:
+      app: chaincode-fabland-bank
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: chaincode-fabland-bank
+    spec:
+      containers:
+        - image: abhithshaji/fabland:2.1
+          name: chaincode-fabland-bank
+          imagePullPolicy: Always
+          env:
+            - name: CHAINCODE_ID
+              value: "fabland:5135c39e5ccea99d71d968c7870adf1e700e36e88360f6e3f3bf2a77d053c969"
+            - name: CHAINCODE_SERVER_ADDRESS
+              value: "0.0.0.0:7052"
+          ports:
+            - containerPort: 7052
