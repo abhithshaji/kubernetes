@@ -339,7 +339,7 @@ Save it and run :
 
 `sudo rm code.tar.gz`
 
-Edit the connection.json file to change address to automobile-mvd:7052 for revenue : 
+Edit the connection.json file to change address to automobile-mvd:7052 for mvd : 
 
 `sudo vim connection.json`
 
