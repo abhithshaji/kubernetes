@@ -313,7 +313,7 @@ Do ls to see code.tar.gz file created
 
 We are packaging the code.tar.gz file with metadat.json and storing it in automobile-manufacturer.gz
 
-`sudo tar cfz fabland-sro.tgz code.tar.gz metadata.json`
+`sudo tar cfz automobile-manufacturer.tgz code.tar.gz metadata.json`
 
 **The above is for peer0 of manufacturer**
 
