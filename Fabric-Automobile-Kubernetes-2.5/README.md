@@ -78,7 +78,7 @@ Go to cloud console -> go to compute engine -> vm instances -> select nfs server
 
 Refer - https://www.youtube.com/watch?v=-RjDWwTZUnc
 
-**Note : add the rule for TCP 2049 port**
+**Note : add the rule for TCP 2049 port or better thing to do is open all ports**
 
 ---
 
